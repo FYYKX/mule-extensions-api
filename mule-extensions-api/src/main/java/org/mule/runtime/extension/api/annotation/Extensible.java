@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * ones will be a part of.
  * <p/>
  * This annotation is meant to be used on classes holding methods annotated
- * with {@link Operation} and all operations defined on that class will be considerable
+ * with operation and all operations defined on that class will be considerable
  * extensible.
  * <p/>
  * Implementation of this extensible type are marked using the {@link ExtensionOf}
