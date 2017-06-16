@@ -28,6 +28,7 @@ import org.mule.runtime.api.meta.model.error.ErrorModel;
 import org.mule.runtime.api.meta.model.error.ImmutableErrorModel;
 import org.mule.runtime.api.meta.model.operation.OperationModel;
 import org.mule.runtime.api.meta.model.source.SourceModel;
+import org.mule.runtime.api.meta.model.transformer.TransformerModel;
 import org.mule.runtime.extension.api.model.ImmutableExtensionModel;
 import org.mule.runtime.extension.internal.util.HierarchyClassMap;
 
@@ -57,6 +58,7 @@ public final class ExtensionModelTypeAdapter extends TypeAdapter<ExtensionModel>
   private static final String OPERATIONS = "operations";
   private static final String CONNECTION_PROVIDERS = "connectionProviders";
   private static final String MESSAGE_SOURCES = "messageSources";
+  private static final String TRANSFORMERS = "transformers";
   private static final String MODEL_PROPERTIES = "modelProperties";
   private static final String NAME = "name";
   private static final String DESCRIPTION = "description";
@@ -127,6 +129,9 @@ public final class ExtensionModelTypeAdapter extends TypeAdapter<ExtensionModel>
     writeWithDelegate(model.getSourceModels(), MESSAGE_SOURCES, out, new TypeToken<List<SourceModel>>() {
 
     });
+    writeWithDelegate(model.getTransformerModels(), TRANSFORMERS, out, new TypeToken<List<TransformerModel>>() {
+
+    });
     writeWithDelegate(model.getErrorModels(), ERRORS, out, new TypeToken<Set<ErrorModel>>() {
 
     });
@@ -168,6 +173,9 @@ public final class ExtensionModelTypeAdapter extends TypeAdapter<ExtensionModel>
     List<SourceModel> sources = parseWithDelegate(json, MESSAGE_SOURCES, new TypeToken<List<SourceModel>>() {
 
     });
+    List<TransformerModel> transformers = parseWithDelegate(json, TRANSFORMERS, new TypeToken<List<TransformerModel>>() {
+
+    });
 
     return new ImmutableExtensionModel(json.get(NAME).getAsString(),
                                        json.get(DESCRIPTION).getAsString(),
@@ -179,6 +187,7 @@ public final class ExtensionModelTypeAdapter extends TypeAdapter<ExtensionModel>
                                        operations,
                                        providers,
                                        sources,
+                                       transformers,
                                        gsonDelegate.fromJson(json.get(DISPLAY_MODEL), DisplayModel.class),
                                        gsonDelegate.fromJson(json.get(XML_DSL), XmlDslModel.class),
                                        subTypes,

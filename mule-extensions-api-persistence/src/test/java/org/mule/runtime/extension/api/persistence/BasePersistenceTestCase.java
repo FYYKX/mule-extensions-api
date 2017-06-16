@@ -51,6 +51,7 @@ import org.mule.runtime.api.meta.model.parameter.ParameterGroupModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.meta.model.source.SourceModel;
 import org.mule.runtime.api.meta.model.tck.TestCoreExtensionDeclarer;
+import org.mule.runtime.api.meta.model.transformer.TransformerModel;
 import org.mule.runtime.extension.api.connectivity.oauth.AuthorizationCodeGrantType;
 import org.mule.runtime.extension.api.connectivity.oauth.OAuthModelProperty;
 import org.mule.runtime.extension.api.declaration.type.DefaultExtensionsTypeLoaderFactory;
@@ -67,14 +68,13 @@ import org.mule.runtime.extension.api.model.parameter.ImmutableParameterGroupMod
 import org.mule.runtime.extension.api.model.parameter.ImmutableParameterModel;
 import org.mule.runtime.extension.api.model.source.ImmutableSourceCallbackModel;
 import org.mule.runtime.extension.api.model.source.ImmutableSourceModel;
+import org.mule.runtime.extension.api.model.transformer.ImmutableTransformerModel;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,6 +85,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 
 abstract class BasePersistenceTestCase {
 
@@ -102,6 +105,7 @@ abstract class BasePersistenceTestCase {
   protected final ClassTypeLoader typeLoader = new DefaultExtensionsTypeLoaderFactory().createTypeLoader();
   protected final BaseTypeBuilder typeBuilder = BaseTypeBuilder.create(MetadataFormat.JAVA);
   protected final MetadataType stringType = typeLoader.load(String.class);
+  protected final MetadataType integerType = typeLoader.load(Integer.class);
   protected final String GET_CAR_OPERATION_NAME = "getCar";
   protected final String CAR_NAME_PARAMETER_NAME = "carName";
   protected final String MODEL_PROPERTIES_NODE = "modelProperties";
@@ -112,6 +116,7 @@ abstract class BasePersistenceTestCase {
   protected final String OBJECT_MAP_NAME = "map";
 
   protected final String SOURCE_NAME = "Source";
+  protected final String TRANSFORMER_NAME = "Transformer";
   protected final ParameterDslConfiguration defaultParameterDsl = ParameterDslConfiguration.getDefaultInstance();
   protected final LayoutModel defaultLayoutModel = LayoutModel.builder().build();
 
@@ -126,6 +131,7 @@ abstract class BasePersistenceTestCase {
   protected ScopeModel foreachScope;
   protected RouterModel choiceRouter;
   protected SourceModel sourceModel;
+  protected TransformerModel transformerModel;
   protected JsonElement serializedExtensionModel;
   protected JsonObject operationModelProperties;
   protected List<ExtensionModel> extensionModelList;
@@ -224,6 +230,9 @@ abstract class BasePersistenceTestCase {
                                            DisplayModel.builder().build(),
                                            emptySet(), emptySet(), emptySet());
 
+    transformerModel = new ImmutableTransformerModel(TRANSFORMER_NAME, "A Transformer",
+                                                     singletonList(stringType), integerType, emptySet());
+
 
     LinkedHashSet<ObjectType> typesCatalog = new LinkedHashSet<>();
     typesCatalog.add(exportedType);
@@ -233,9 +242,8 @@ abstract class BasePersistenceTestCase {
     originalExtensionModel =
         new ImmutableExtensionModel("DummyExtension", "Test extension", "4.0.0", "MuleSoft", COMMUNITY,
                                     new MuleVersion("4.0"), emptyList(), asList(getCarOperation, foreachScope, choiceRouter),
-                                    singletonList(basicAuth), singletonList(sourceModel),
-                                    defaultDisplayModel, XmlDslModel.builder().build(),
-                                    emptySet(), typesCatalog,
+                                    singletonList(basicAuth), singletonList(sourceModel), singletonList(transformerModel),
+                                    defaultDisplayModel, XmlDslModel.builder().build(), emptySet(), typesCatalog,
                                     emptySet(), emptySet(), singleton(ERROR_MODEL),
                                     externalLibrarySet(), singleton(accessCodeModelProperty));
 

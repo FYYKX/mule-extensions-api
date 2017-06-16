@@ -7,12 +7,6 @@
 package org.mule.runtime.extension.api.persistence;
 
 import static java.util.Collections.emptySet;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.mule.metadata.api.model.MetadataType;
 import org.mule.metadata.api.model.ObjectType;
 import org.mule.metadata.api.utils.MetadataTypeUtils;
@@ -39,6 +33,7 @@ import org.mule.runtime.api.meta.model.parameter.ExclusiveParametersModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterGroupModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.meta.model.source.SourceCallbackModel;
+import org.mule.runtime.api.meta.model.transformer.TransformerModel;
 import org.mule.runtime.extension.api.connectivity.oauth.AuthorizationCodeGrantType;
 import org.mule.runtime.extension.api.connectivity.oauth.OAuthGrantType;
 import org.mule.runtime.extension.api.model.ImmutableExtensionModel;
@@ -50,6 +45,7 @@ import org.mule.runtime.extension.api.model.parameter.ImmutableExclusiveParamete
 import org.mule.runtime.extension.api.model.parameter.ImmutableParameterGroupModel;
 import org.mule.runtime.extension.api.model.parameter.ImmutableParameterModel;
 import org.mule.runtime.extension.api.model.source.ImmutableSourceCallbackModel;
+import org.mule.runtime.extension.api.model.transformer.ImmutableTransformerModel;
 import org.mule.runtime.extension.internal.persistence.DefaultImplementationTypeAdapterFactory;
 import org.mule.runtime.extension.internal.persistence.ElementDslModelTypeAdapter;
 import org.mule.runtime.extension.internal.persistence.ExtensionModelTypeAdapter;
@@ -67,6 +63,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Serializer that can convert a {@link ExtensionModel} into a readable and processable JSON representation and from a JSON
@@ -176,6 +177,8 @@ public class ExtensionModelJsonSerializer {
         .registerTypeAdapterFactory(connectionProviderModelTypeAdapterFactory)
         .registerTypeAdapterFactory(new OperationModelTypeAdapterFactory())
         .registerTypeAdapterFactory(new DefaultImplementationTypeAdapterFactory<>(RouteModel.class, ImmutableRouteModel.class))
+        .registerTypeAdapterFactory(new DefaultImplementationTypeAdapterFactory<>(TransformerModel.class,
+                                                                                  ImmutableTransformerModel.class))
         .registerTypeAdapterFactory(outputModelTypeAdapterFactory)
         .registerTypeAdapterFactory(errorModelTypeAdapter)
         .registerTypeAdapterFactory(oauthGrantTypeAdapter);

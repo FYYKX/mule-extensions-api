@@ -23,6 +23,7 @@ import org.mule.runtime.api.meta.model.error.ErrorModel;
 import org.mule.runtime.api.meta.model.operation.OperationModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.meta.model.source.SourceModel;
+import org.mule.runtime.api.meta.model.transformer.TransformerModel;
 import org.mule.runtime.extension.api.exception.IllegalModelDefinitionException;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class ImmutableExtensionModel extends AbstractComplexModel implements Ext
   private final MuleVersion minMuleVersion;
   private final Category category;
   private final List<ConfigurationModel> configurations;
+  private final List<TransformerModel> transformers;
   private final Set<ErrorModel> errors;
   private final Set<ObjectType> types;
   private final Set<String> resources;
@@ -63,6 +65,7 @@ public class ImmutableExtensionModel extends AbstractComplexModel implements Ext
    * @param operationModels       A {@link List} with the extension's {@link OperationModel operationModels}
    * @param connectionProviders   A {@link List} with the extension's {@link ConnectionProviderModel connection provider models}
    * @param sourceModels          A {@link List} with the extension's {@link SourceModel message source models}
+   * @param transformerModels     A {@link List} with the extension's {@link TransformerModel transformer models}
    * @param displayModel          A model which contains directive about how the extension is displayed in the UI
    * @param xmlDslModel           the {@link XmlDslModel} which describes the XML language
    * @param subTypes              A {@link Set} with the sub types defined by this extension
@@ -84,6 +87,7 @@ public class ImmutableExtensionModel extends AbstractComplexModel implements Ext
                                  List<OperationModel> operationModels,
                                  List<ConnectionProviderModel> connectionProviders,
                                  List<SourceModel> sourceModels,
+                                 List<TransformerModel> transformerModels,
                                  DisplayModel displayModel,
                                  XmlDslModel xmlDslModel,
                                  Set<SubTypesModel> subTypes,
@@ -95,6 +99,7 @@ public class ImmutableExtensionModel extends AbstractComplexModel implements Ext
                                  Set<ModelProperty> modelProperties) {
     super(name, description, operationModels, connectionProviders, sourceModels, displayModel, modelProperties);
     this.configurations = unique(configurationModels, "Configurations");
+    this.transformers = unique(transformerModels, "Transformers");
 
     checkModelArgument(version != null && version.length() > 0, "Version cannot be blank");
     checkModelArgument(minMuleVersion != null, "Extension Minimum Mule Version cannot be null");
@@ -130,6 +135,22 @@ public class ImmutableExtensionModel extends AbstractComplexModel implements Ext
   @Override
   public Optional<ConfigurationModel> getConfigurationModel(String name) {
     return findModel(configurations, name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<TransformerModel> getTransformerModels() {
+    return transformers;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Optional<TransformerModel> getTransformerModel(String name) {
+    return findModel(transformers, name);
   }
 
   /**

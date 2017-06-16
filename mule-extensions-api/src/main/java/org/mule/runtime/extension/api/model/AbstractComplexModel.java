@@ -13,7 +13,6 @@ import static java.util.Collections.unmodifiableList;
 import org.mule.runtime.api.meta.DescribedObject;
 import org.mule.runtime.api.meta.NamedObject;
 import org.mule.runtime.api.meta.model.ModelProperty;
-import org.mule.runtime.extension.api.exception.IllegalModelDefinitionException;
 import org.mule.runtime.api.meta.model.connection.ConnectionProviderModel;
 import org.mule.runtime.api.meta.model.connection.HasConnectionProviderModels;
 import org.mule.runtime.api.meta.model.display.DisplayModel;
@@ -21,6 +20,7 @@ import org.mule.runtime.api.meta.model.operation.HasOperationModels;
 import org.mule.runtime.api.meta.model.operation.OperationModel;
 import org.mule.runtime.api.meta.model.source.HasSourceModels;
 import org.mule.runtime.api.meta.model.source.SourceModel;
+import org.mule.runtime.extension.api.exception.IllegalModelDefinitionException;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -71,6 +71,14 @@ public abstract class AbstractComplexModel extends AbstractNamedImmutableModel
    * {@inheritDoc}
    */
   @Override
+  public Optional<OperationModel> getOperationModel(String name) {
+    return findModel(operations, name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public List<SourceModel> getSourceModels() {
     return messageSources;
   }
@@ -89,14 +97,6 @@ public abstract class AbstractComplexModel extends AbstractNamedImmutableModel
   @Override
   public Optional<ConnectionProviderModel> getConnectionProviderModel(String name) {
     return findModel(connectionProviders, name);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Optional<OperationModel> getOperationModel(String name) {
-    return findModel(operations, name);
   }
 
   /**

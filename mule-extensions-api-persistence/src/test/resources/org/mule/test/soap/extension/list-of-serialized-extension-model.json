@@ -1598,6 +1598,29 @@
         "kind": "source"
       }
     ],
+    "transformers": [
+      {
+        "name": "Transformer",
+        "sourceTypes": [
+          {
+            "format": "java",
+            "type": "String",
+            "annotations": {
+              "typeId": "java.lang.String"
+            }
+          }
+        ],
+        "outputType": {
+          "format": "java",
+          "type": "Number",
+          "annotations": {
+            "typeId": "java.lang.Integer"
+          }
+        },
+        "description": "A Transformer",
+        "modelProperties": {}
+      }
+    ],
     "errors": [
       {
         "type": "SOME_ERROR",
@@ -3408,6 +3431,29 @@
         "description": "A Message Source",
         "modelProperties": {},
         "kind": "source"
+      }
+    ],
+    "transformers": [
+      {
+        "name": "Transformer",
+        "sourceTypes": [
+          {
+            "format": "java",
+            "type": "String",
+            "annotations": {
+              "typeId": "java.lang.String"
+            }
+          }
+        ],
+        "outputType": {
+          "format": "java",
+          "type": "Number",
+          "annotations": {
+            "typeId": "java.lang.Integer"
+          }
+        },
+        "description": "A Transformer",
+        "modelProperties": {}
       }
     ],
     "errors": [

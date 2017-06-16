@@ -93,9 +93,8 @@ public class LoadAndSerializeXmlExtensionModels {
 
     originalExtensionModel =
         new ImmutableExtensionModel("DummyExtension", "Test extension", "4.0.0", "MuleSoft",
-                                    COMMUNITY, new MuleVersion("4.0"), emptyList(),
-                                    singletonList(getCarOperation),
-                                    emptyList(), emptyList(), defaultDisplayModel, XmlDslModel.builder().build(),
+                                    COMMUNITY, new MuleVersion("4.0"), emptyList(), singletonList(getCarOperation),
+                                    emptyList(), emptyList(), emptyList(), defaultDisplayModel, XmlDslModel.builder().build(),
                                     emptySet(), emptySet(), emptySet(), emptySet(), emptySet(), emptySet(), emptySet());
 
     extensionModelJsonSerializer = new ExtensionModelJsonSerializer(true);

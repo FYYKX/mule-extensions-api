@@ -38,6 +38,7 @@ import org.mule.runtime.api.meta.model.declaration.fluent.RouterDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.ScopeDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.SourceCallbackDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.SourceDeclaration;
+import org.mule.runtime.api.meta.model.declaration.fluent.TransformerDeclaration;
 import org.mule.runtime.api.meta.model.operation.OperationModel;
 import org.mule.runtime.api.meta.model.operation.RouteModel;
 import org.mule.runtime.api.meta.model.parameter.ExclusiveParametersModel;
@@ -46,6 +47,7 @@ import org.mule.runtime.api.meta.model.parameter.ParameterModel;
 import org.mule.runtime.api.meta.model.parameter.ParameterizedModel;
 import org.mule.runtime.api.meta.model.source.SourceCallbackModel;
 import org.mule.runtime.api.meta.model.source.SourceModel;
+import org.mule.runtime.api.meta.model.transformer.TransformerModel;
 import org.mule.runtime.extension.api.exception.IllegalModelDefinitionException;
 import org.mule.runtime.extension.api.exception.IllegalParameterModelDefinitionException;
 import org.mule.runtime.extension.api.loader.DeclarationEnricher;
@@ -65,6 +67,7 @@ import org.mule.runtime.extension.api.model.parameter.ImmutableParameterGroupMod
 import org.mule.runtime.extension.api.model.parameter.ImmutableParameterModel;
 import org.mule.runtime.extension.api.model.source.ImmutableSourceCallbackModel;
 import org.mule.runtime.extension.api.model.source.ImmutableSourceModel;
+import org.mule.runtime.extension.api.model.transformer.ImmutableTransformerModel;
 import org.mule.runtime.extension.internal.loader.enricher.ConnectionProviderDeclarationEnricher;
 import org.mule.runtime.extension.internal.loader.enricher.ContentParameterDeclarationEnricher;
 import org.mule.runtime.extension.internal.loader.enricher.ExecutionTypeDeclarationEnricher;
@@ -90,7 +93,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.UncheckedExecutionException;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -99,6 +101,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
+
+import org.slf4j.Logger;
 
 /**
  * A factory that can take an {@link ExtensionDeclarer} and transform it into an actual
@@ -223,6 +227,7 @@ public final class ExtensionModelFactory {
                                       toOperations(extensionDeclaration.getOperations()),
                                       toConnectionProviders(extensionDeclaration.getConnectionProviders()),
                                       toMessageSources(extensionDeclaration.getMessageSources()),
+                                      toTransformers(extensionDeclaration.getTransformers()),
                                       extensionDeclaration.getDisplayModel(),
                                       extensionDeclaration.getXmlDslModel(),
                                       extensionDeclaration.getSubTypes(),
@@ -298,6 +303,19 @@ public final class ExtensionModelFactory {
                                                       declaration.getErrorModels(),
                                                       declaration.getModelProperties()));
     }
+
+    private List<TransformerModel> toTransformers(List<TransformerDeclaration> transformers) {
+      return unmodifiableList(alphaSortDescribedList(transformers.stream().map(this::toTransformer).collect(toList())));
+    }
+
+    private TransformerModel toTransformer(TransformerDeclaration declaration) {
+      return new ImmutableTransformerModel(declaration.getName(),
+                                           declaration.getDescription(),
+                                           declaration.getSourceTypes(),
+                                           declaration.getOutputType(),
+                                           declaration.getModelProperties());
+    }
+
 
     private Optional<SourceCallbackModel> toSourceCallback(Optional<SourceCallbackDeclaration> callbackDeclaration) {
       return callbackDeclaration.map(callback -> new ImmutableSourceCallbackModel(callback.getName(),
