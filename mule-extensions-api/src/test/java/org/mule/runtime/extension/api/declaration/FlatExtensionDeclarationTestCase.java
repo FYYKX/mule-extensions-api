@@ -6,6 +6,7 @@
  */
 package org.mule.runtime.extension.api.declaration;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -13,60 +14,15 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mule.metadata.api.model.MetadataFormat.XML;
+import static org.mule.metadata.api.utils.MetadataTypeUtils.getTypeId;
 import static org.mule.runtime.api.meta.Category.SELECT;
 import static org.mule.runtime.api.meta.ExpressionSupport.NOT_SUPPORTED;
 import static org.mule.runtime.api.meta.ExpressionSupport.REQUIRED;
 import static org.mule.runtime.api.meta.ExpressionSupport.SUPPORTED;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.ADDRESS;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.ARG_LESS;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.BROADCAST;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.BROADCAST_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CALLBACK;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CALLBACK_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.COLLECTION_PARAMETER;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONFIGURATION_MODEL_PROPERTY;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONFIG_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONFIG_NAME;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONFIG_PARAMETER_GROUP;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONNECTION_PROVIDER_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONNECTION_PROVIDER_NAME;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONNECTION_PROVIDER_PARAMETER_GROUP;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.CONSUMER;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.DEFAULT_PORT;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.EXTENSION_MODEL_PROPERTY;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.EXTERNAL_LIBRARY_MODEL;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.GO_GET_THEM_TIGER;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.HAS_NO_ARGS;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.LISTENER;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.LISTEN_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.MIN_MULE_VERSION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.MTOM_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.MTOM_ENABLED;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.MULESOFT;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.OPERATION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.OPERATION_MODEL_PROPERTY;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.OPERATION_PARAMETER_GROUP;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.PARAMETER_MODEL_PROPERTY;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.PASSWORD;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.PASSWORD_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.PORT;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.PORT_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.SERVICE;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.SERVICE_ADDRESS;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.SERVICE_NAME;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.SERVICE_PORT;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.SOURCE_PARAMETER_GROUP;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.THE_OPERATION_TO_USE;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.URI_TO_FIND_THE_WSDL;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.URL;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.URL_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.USERNAME;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.USERNAME_DESCRIPTION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.VERSION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.WSDL_LOCATION;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.WS_CONSUMER;
-import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.WS_CONSUMER_DESCRIPTION;
+import static org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer.*;
 import org.mule.metadata.api.model.BinaryType;
+import org.mule.metadata.api.model.MetadataType;
 import org.mule.metadata.api.model.NumberType;
 import org.mule.metadata.api.model.ObjectType;
 import org.mule.metadata.api.model.StringType;
@@ -82,6 +38,7 @@ import org.mule.runtime.api.meta.model.declaration.fluent.ParameterDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.ParameterGroupDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.ParameterizedDeclaration;
 import org.mule.runtime.api.meta.model.declaration.fluent.SourceDeclaration;
+import org.mule.runtime.api.meta.model.declaration.fluent.TransformerDeclaration;
 import org.mule.runtime.api.meta.model.operation.OperationModel;
 import org.mule.runtime.api.meta.model.tck.TestWebServiceConsumerDeclarer;
 
@@ -191,6 +148,27 @@ public class FlatExtensionDeclarationTestCase extends BaseDeclarationTestCase {
     assertThat(parameters, hasSize(2));
     assertParameter(parameters.get(0), URL, URL_DESCRIPTION, SUPPORTED, true, typeLoader.load(String.class), null);
     assertParameter(parameters.get(1), PORT, PORT_DESCRIPTION, SUPPORTED, false, typeLoader.load(Integer.class), DEFAULT_PORT);
+  }
+
+  @Test
+  public void transformer() throws Exception {
+    List<TransformerDeclaration> transformers = extensionDeclaration.getTransformers();
+    assertThat(transformers, hasSize(1));
+
+
+    TransformerDeclaration transformer = transformers.get(0);
+    assertThat(transformer, is(notNullValue()));
+    assertThat(transformer.getName(), is(TRANSFORMER_NAME));
+    assertThat(transformer.getDescription(), is(TRANSFORMER_DESCRIPTION));
+
+    List<MetadataType> sourceTypes = transformer.getSourceTypes();
+    assertThat(sourceTypes, hasSize(1));
+    MetadataType sourceType = sourceTypes.get(0);
+    assertThat(sourceType, is(instanceOf(StringType.class)));
+    assertThat(sourceType.getMetadataFormat(), is(XML));
+
+    assertThat(transformer.getOutputType(), is(instanceOf(ObjectType.class)));
+    assertThat(getTypeId(transformer.getOutputType()).get(), is(Envelope.class.getName()));
   }
 
   private void assertConsumeOperation(List<OperationDeclaration> operations) {
