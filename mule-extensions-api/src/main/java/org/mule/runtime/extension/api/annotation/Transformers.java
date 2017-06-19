@@ -20,5 +20,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Transformers {
 
-  Class<? extends ImplicitTransformer> value();
+  Class<? extends ImplicitTransformer>[] value();
 }
