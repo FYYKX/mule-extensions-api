@@ -11,6 +11,9 @@ import org.mule.runtime.api.metadata.DataType;
 
 import java.util.List;
 
+/**
+ * 
+ */
 public interface ImplicitTransformer extends NamedObject {
 
   List<DataType> getSourceTypes();

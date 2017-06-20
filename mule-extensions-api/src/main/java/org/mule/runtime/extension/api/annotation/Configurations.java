@@ -6,6 +6,8 @@
  */
 package org.mule.runtime.extension.api.annotation;
 
+import org.mule.runtime.api.meta.model.config.ConfigurationModel;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,8 +15,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows to reference a list of classes from which a {@code org.mule.runtime.extension.api.introspection.Configuration}
- * model is to be inferred. This annotation is to be used in classes which are also annotated with
+ * Allows to reference a list of classes from which a {@link ConfigurationModel configuration}
+ * model are to be inferred. This annotation is to be used in classes which are also annotated with
  * {@link Extension} and {@link #value()} must reference classes which are annotated with {@link Configuration}
  *
  * @since 1.0

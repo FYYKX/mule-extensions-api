@@ -17,12 +17,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Immutable implementation of {@link TransformerModel}
+ *
+ * @since 1.0
+ */
 public class ImmutableTransformerModel extends AbstractImmutableModel implements NamedObject, TransformerModel {
 
   private final String name;
   private final List<MetadataType> sourceTypes;
   private final MetadataType outputType;
 
+  /**
+   * Creates a new instance
+   *
+   * @param name            the transformer's name
+   * @param description     the transformer's description
+   * @param sourceTypes     the source types
+   * @param outputType      the output type
+   * @param modelProperties a {@link Set} of custom properties which extend this model
+   */
   public ImmutableTransformerModel(String name,
                                    String description,
                                    List<MetadataType> sourceTypes,
