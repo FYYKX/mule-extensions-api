@@ -131,8 +131,8 @@ public final class XmlModelUtils {
     return String.format(DEFAULT_NAMESPACE_URI_MASK, namespace);
   }
 
-  private static String buildDefaultXsdFileName(String namespace) {
-    return String.format("mule-%s%s", namespace, XSD_EXTENSION);
+  private static String buildDefaultXsdFileName(String prefix) {
+    return CORE_PREFIX.equals(prefix) ? "mule.xsd" : String.format("mule-%s%s", prefix, XSD_EXTENSION);
   }
 
   private static String buildDefaultSchemaLocation(String namespaceLocation, String xsdFileName) {
