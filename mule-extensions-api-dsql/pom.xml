@@ -40,25 +40,26 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr3-maven-plugin</artifactId>
-                <version>${antlrVersion}</version>
-                <configuration>
-                    <sourceDirectory>${basedir}/src/main/resources/grammar</sourceDirectory>
-                    <outputDirectory>${basedir}/src/main/java/org/mule/runtime/extension/internal</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>antlr</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <!--// TODO(pablo.kraan): re-add this-->
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.antlr</groupId>-->
+                <!--<artifactId>antlr3-maven-plugin</artifactId>-->
+                <!--<version>${antlrVersion}</version>-->
+                <!--<configuration>-->
+                    <!--<sourceDirectory>${basedir}/src/main/resources/grammar</sourceDirectory>-->
+                    <!--<outputDirectory>${basedir}/src/main/java/org/mule/runtime/extension/internal</outputDirectory>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>antlr</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 
 </project>
