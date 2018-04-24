@@ -48,6 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @since 1.0
  */
+//TODO remove this public
 public final class DslSyntaxUtils {
 
   private final static String CONNECTION_PROVIDER_SUFFIX = "connection";
@@ -62,7 +63,8 @@ public final class DslSyntaxUtils {
    * @param component the {@link NamedObject} who's name we want to convert
    * @return a sanitized, hyphenized, space-free name that can be used as an XML element-name
    */
-  static String getSanitizedElementName(NamedObject component) {
+  //TODO remove visibility change
+  public static String getSanitizedElementName(NamedObject component) {
     String name = hyphenize(sanitizeName(capitalize(component.getName()))).replaceAll("\\s+", "");
     if (component instanceof ConfigurationModel) {
       return appendSuffix(name, CONFIGURATION_SUFFIX);
