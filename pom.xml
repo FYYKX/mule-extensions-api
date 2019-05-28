@@ -129,6 +129,8 @@
         <jacoco.version>0.8.2</jacoco.version>
         <javaFormatter.plugin.version>2.0.1</javaFormatter.plugin.version>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
+        <maven.javadoc.plugin.version>3.1.0</maven.javadoc.plugin.version>
+        <maven.site.plugin.version>3.7.1</maven.site.plugin.version>
         <formatterConfigPath>formatter.xml</formatterConfigPath>
         <formatterGoal>validate</formatterGoal>
         <skipCodeFormatting>false</skipCodeFormatting>
@@ -291,6 +293,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven.javadoc.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>attach-javadocs</id>
@@ -302,6 +305,11 @@
                     <configuration>
                         <additionalparam>${xDocLint}</additionalparam>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven.site.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.mule.tools.maven</groupId>
