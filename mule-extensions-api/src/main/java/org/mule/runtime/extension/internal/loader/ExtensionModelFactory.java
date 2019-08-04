@@ -108,14 +108,11 @@ import org.mule.runtime.extension.internal.loader.validator.NameClashModelValida
 import org.mule.runtime.extension.internal.loader.validator.NameModelValidator;
 import org.mule.runtime.extension.internal.loader.validator.OperationModelValidator;
 import org.mule.runtime.extension.internal.loader.validator.ParameterModelValidator;
+import org.mule.runtime.extension.internal.loader.validator.StereotypesHierarchyConsistentValidator;
 import org.mule.runtime.extension.internal.loader.validator.SubtypesModelValidator;
+import org.mule.runtime.extension.internal.loader.validator.TopLevelPojoWithStereotypeValidator;
 import org.mule.runtime.extension.internal.loader.validator.TransactionalParametersValidator;
 import org.mule.runtime.extension.internal.loader.validator.ValidatorModelValidator;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -126,6 +123,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 
 /**
  * A factory that can take an {@link ExtensionDeclarer} and transform it into an actual {@link ExtensionModel}.
@@ -175,7 +177,9 @@ public final class ExtensionModelFactory {
                                                        new TransactionalParametersValidator(),
                                                        new ValidatorModelValidator(),
                                                        new NameModelValidator(),
-                                                       new BackPressureModelValidator()));
+                                                       new BackPressureModelValidator(),
+                                                       new TopLevelPojoWithStereotypeValidator(),
+                                                       new StereotypesHierarchyConsistentValidator()));
 
     validate = isTestingMode() || isForceExtensionValidation();
   }
@@ -239,7 +243,7 @@ public final class ExtensionModelFactory {
 
   private class FactoryDelegate {
 
-    private Cache<ParameterizedDeclaration, ParameterizedModel> modelCache = CacheBuilder.newBuilder().build();
+    private final Cache<ParameterizedDeclaration, ParameterizedModel> modelCache = CacheBuilder.newBuilder().build();
 
     private ExtensionModel toExtension(ExtensionDeclaration extensionDeclaration) {
       validateMuleVersion(extensionDeclaration);
