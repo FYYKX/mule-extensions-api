@@ -54,8 +54,8 @@ public final class ExtensionTypesDeclarationEnricher implements DeclarationEnric
   @Override
   public void enrich(ExtensionLoadingContext extensionLoadingContext) {
     final ExtensionDeclarer declarer = extensionLoadingContext.getExtensionDeclarer();
-    declareDefaultTypes(declarer);
     declareSubTypes(declarer);
+    declareDefaultTypes(declarer);
   }
 
   private void declareSubTypes(ExtensionDeclarer declarer) {
